@@ -1,0 +1,7 @@
+built/
+node_modules/
+pxt_modules/
+.pxt/
+*.js.map
+.DS_Store
+Thumbs.db

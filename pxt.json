@@ -1,0 +1,16 @@
+{
+    "name": "ezhan-super-car",
+    "version": "1.0.0",
+    "description": "SUPER EZHAN CAR - Ezhan's own MakeCode Arcade racer: 17 tracks with shortcuts and secret gates, missile car, jets, rockets, slime, boss, 18 cars, paint maker, robot add-ons, agents & bots, keys, pretend Connect menu, endless repeat mode and a 103,904-item stacking shop",
+    "dependencies": {
+        "device": "*",
+        "arcade-mini-menu": "github:riknoll/arcade-mini-menu#v0.1.0"
+    },
+    "files": [
+        "kinds.ts", "save.ts", "sounds.ts", "art.ts", "fx.ts", "upgrades.ts", "garage.ts", "paint.ts",
+        "shop.ts", "robots.ts", "agents.ts", "keys.ts", "tracks.ts", "player.ts", "flight.ts", "weapons.ts",
+        "rivals.ts", "boss.ts", "pickups.ts", "weather.ts", "laptimer.ts", "connect.ts", "login.ts",
+        "hud.ts", "modes.ts", "main.ts", "README.md"
+    ],
+    "preferredEditor": "tsprj"
+}
