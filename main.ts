@@ -30,26 +30,34 @@ function backToMenu() {
     showMainMenu()
 }
 
+// EVERY feature has its own button right here on the main menu (it scrolls).
 function showMainMenu() {
     gameState = STATE_MENU
     let items = [
         "Race: " + trackNames[selectedTrack],
-        "Super Grand Prix (6 races)",
+        "Super Grand Prix (6)",
         "Endless Repeat (forever!)",
         "Time Trial",
         "BOSS: Mega Jet King",
         "Missile Mayhem Arena",
-        "Rocket Rally (everyone flies)",
+        "Rocket Rally (all fly)",
         "Slime Survival",
         "Jet Jump Challenge",
         "Drift King",
-        "Pick Track (" + trackNames.length + ")",
-        "Garage + Paint Maker",
-        "Upgrades",
+        "Branches + Tracks (" + trackNames.length + ")",
+        "Garage (" + NUM_CARS + " cars)",
+        "Paint Maker (color maker)",
         "Mega Shop (" + withCommas(totalShopItems()) + ")",
+        "Robots (robot add-ons)",
         "Agents & Bots",
         "Key Vault (" + keysHeld + " keys)",
-        "Connect (WiFi/BT/Car)",
+        "Connect X WiFi",
+        "Connect X Bluetooth",
+        "Connect X Car",
+        "+ Add name WiFi/BT/Car",
+        "F5 Refresh (rescan all)",
+        "Login / Switch user",
+        "Upgrades",
         "Weather",
         "Best Times",
         "Settings",
@@ -69,14 +77,21 @@ function showMainMenu() {
         else if (pick == 9) { startRace(MODE_DRIFT_KING, selectedTrack) }
         else if (pick == 10) { openTrackMenu(showMainMenu) }
         else if (pick == 11) { openGarage(showMainMenu) }
-        else if (pick == 12) { openUpgrades(showMainMenu) }
+        else if (pick == 12) { openPaintMaker(showMainMenu) }
         else if (pick == 13) { openShop(showMainMenu) }
-        else if (pick == 14) { openAgentsMenu(showMainMenu) }
-        else if (pick == 15) { openKeyVault(showMainMenu) }
-        else if (pick == 16) { openConnect(showMainMenu) }
-        else if (pick == 17) { openWeatherMenu(showMainMenu) }
-        else if (pick == 18) { showRecords(showMainMenu) }
-        else if (pick == 19) { openSettings(showMainMenu) }
+        else if (pick == 14) { openCategory(CAT_ROBOT, 0, showMainMenu) }
+        else if (pick == 15) { openAgentsMenu(showMainMenu) }
+        else if (pick == 16) { openKeyVault(showMainMenu) }
+        else if (pick == 17) { startScan(0, function () { openConnectList(0, showMainMenu) }) }
+        else if (pick == 18) { startScan(1, function () { openConnectList(1, showMainMenu) }) }
+        else if (pick == 19) { startScan(2, function () { openConnectList(2, showMainMenu) }) }
+        else if (pick == 20) { openAddNameMenu(showMainMenu) }
+        else if (pick == 21) { refreshAll(showMainMenu) }
+        else if (pick == 22) { loginScreen(); startMenuMusic(); showMainMenu() }
+        else if (pick == 23) { openUpgrades(showMainMenu) }
+        else if (pick == 24) { openWeatherMenu(showMainMenu) }
+        else if (pick == 25) { showRecords(showMainMenu) }
+        else if (pick == 26) { openSettings(showMainMenu) }
         else { showHelp(); showMainMenu() }
     }, showMainMenu)
 }
@@ -144,6 +159,7 @@ function openPauseMenu() {
         raceStartTime += lost
         countdownEnd += lost
         modeEndAt += lost
+        player.setFlag(SpriteFlag.Invisible, false)
         gameState = STATE_RACING
     }
     showMenu("PAUSED", ["Resume", "Shop", "Garage", "Agents & Bots", "Restart", "Quit to menu"], function (pick: number) {
@@ -165,9 +181,12 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             startMenuMusic()
             showMainMenu()
         })
+    } else if (gameState == STATE_PAINT) {
+        rainbowPaint()          // Paint Maker: A = rainbow
     }
 })
 
+// one handler per button (MakeCode keeps only the LAST onEvent per button)
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     if (gameState == STATE_RACING && !raceOver && !menuOpen) {
         openPauseMenu()
@@ -175,10 +194,17 @@ controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
         // F5 REFRESH: rescan
         scanUntil = game.runtime() + 2000
         zapSound()
+    } else if (gameState == STATE_PAINT) {
+        paintAllOneColor()      // Paint Maker: MENU = all one color
     }
 })
 
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (gameState == STATE_PAINT) {
+        paintPart = (paintPart + 1) % NUM_PARTS     // Paint Maker: DOWN = next part
+        menuMoveSound()
+        return
+    }
     if (gameState != STATE_RACING || menuOpen || !canDrive()) { return }
     if (controller.B.isPressed()) {
         if (hasSpecial(SP_JET)) { jetHop() } else { honk() }

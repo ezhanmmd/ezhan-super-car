@@ -14,6 +14,12 @@ Ezhan's own MakeCode Arcade car racer.
 - B + DOWN = jet hop (jet cars) or horn
 - MENU = pause (on the Connect scan screen, MENU = F5 refresh)
 
+## Main menu (every feature has its own button, the list scrolls)
+Race, Super Grand Prix, Endless Repeat, Time Trial, BOSS, Missile Mayhem, Rocket Rally,
+Slime Survival, Jet Jump, Drift King, Branches + Tracks, Garage, Paint Maker, Mega Shop,
+Robots, Agents & Bots, Key Vault, Connect X WiFi, Connect X Bluetooth, Connect X Car,
++ Add name, F5 Refresh, Login / Switch user, Upgrades, Weather, Best Times, Settings, How to play
+
 ## Features
 - Super Ezhan title screen, car login (username + 4-digit game PIN) or Guest
 - 17 tracks (14 race tracks + boss fortress + Missile Mayhem arena + secret Rainbow Road)

@@ -35,7 +35,7 @@ function changePaintColor(step: number) {
 
 function closePaintMaker() {
     saveCarAndPaint()
-    if (player) { player.setFlag(SpriteFlag.Invisible, false) }
+    // the car shows again when a race starts or the pause menu resumes
     gameState = STATE_MENU
     buySound()
     let d = paintDone
@@ -58,16 +58,20 @@ function rainbowPaint() {
     bigPopSound()
 }
 
+function paintAllOneColor() {
+    let i = 1
+    while (i < NUM_PARTS) {
+        partColor[i] = partColor[PART_BODY]
+        i += 1
+    }
+    refreshPaintPreview()
+    squishSound()
+}
+
 function paintButtons() {
     controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         if (gameState == STATE_PAINT) {
             paintPart = (paintPart + NUM_PARTS - 1) % NUM_PARTS
-            menuMoveSound()
-        }
-    })
-    controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-        if (gameState == STATE_PAINT) {
-            paintPart = (paintPart + 1) % NUM_PARTS
             menuMoveSound()
         }
     })
@@ -83,20 +87,8 @@ function paintButtons() {
     controller.right.onEvent(ControllerButtonEvent.Repeated, function () {
         if (gameState == STATE_PAINT) { changePaintColor(1) }
     })
-    controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-        if (gameState == STATE_PAINT) { rainbowPaint() }
-    })
-    controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
-        if (gameState == STATE_PAINT) {
-            let i = 1
-            while (i < NUM_PARTS) {
-                partColor[i] = partColor[PART_BODY]
-                i += 1
-            }
-            refreshPaintPreview()
-            squishSound()
-        }
-    })
+    // A (rainbow), DOWN (next part) and MENU (all one color) are handled in
+    // main.ts, because MakeCode only keeps ONE onEvent handler per button.
     controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         if (gameState == STATE_PAINT) { closePaintMaker() }
     })

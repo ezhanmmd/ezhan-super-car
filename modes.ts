@@ -34,7 +34,10 @@ function startRace(mode: number, t: number) {
     clearRivals()
     rivalChase = false
     rocketMode = mode == MODE_ROCKET_RALLY
-    if (!trackUnlocked[t]) { t = 0 }
+    // only a normal Race / Time Trial etc. needs the track to be unlocked;
+    // Boss, Arena, Grand Prix and Endless always use their own tracks
+    if (!trackUnlocked[t] && t < NUM_RACE_TRACKS && (mode == MODE_RACE || mode == MODE_TIME_TRIAL || mode == MODE_ROCKET_RALLY || mode == MODE_DRIFT_KING)) { t = 0 }
+    if (t == SECRET_TRACK && !trackUnlocked[t]) { t = 0 }
     loadTrack(t)
     pickWeather()
     if (mode == MODE_SLIME_SURVIVAL) { weather = 8 }

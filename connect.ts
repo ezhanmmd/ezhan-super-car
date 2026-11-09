@@ -121,3 +121,23 @@ function openConnect(done: () => void) {
         }
     }, done)
 }
+
+// main menu "+ Add name": pick WiFi / Bluetooth / Car, type a name, see the list
+function openAddNameMenu(done: () => void) {
+    showMenu("+ ADD NAME (pretend)", ["+ WiFi name", "+ Bluetooth name", "+ Car name"], function (pick: number) {
+        addCustomName(pick)
+        startScan(pick, function () { openConnectList(pick, done) })
+    }, done)
+}
+
+// main menu "F5 Refresh": rescan WiFi, then Bluetooth, then Car
+function refreshAll(done: () => void) {
+    startScan(0, function () {
+        startScan(1, function () {
+            startScan(2, function () {
+                popupText("F5: all rescanned", 7)
+                done()
+            })
+        })
+    })
+}
